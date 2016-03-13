@@ -1,0 +1,96 @@
+/********************************************************************/
+/********************************************************************/
+/***** 		Autores: Carlos Ruiz Ballesteros (GII + MAT)		*****/
+/*****			 Hector Ruiz Poveda	(GII + GIS)      			*****/
+/********************************************************************/
+/********************************************************************/
+
+
+import java_cup.runtime.*;
+parser code{:
+	@Override 
+	public void syntax_error(Symbol s) { 
+		int l = s.left + 1;
+		int c = s.right + 1;
+		report_error(" La Cadena: " + s.value + " Ha producido un error de sintaxis en la linea " + l + " columna " + c, null); 
+	}
+	@Override 
+	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+		report_fatal_error(" La Cadena: " + s.value + " esta fuera de contexto.", null); 
+	}
+:};
+
+terminal program, begin, end, const, var, procedure, function;
+terminal integer, real, character;
+terminal two_points, semicolon, dot, coma, equal, open_parenthesis, closed_parenthesis, assignment, lt, gt, le, ge;
+terminal not_equal, plus, minus, multip, div, mod, or, and, not;
+terminal identifier, numeric_integer_const, numeric_real_const, string_const;
+// terminal array, type, while_tok, do_tok, then, if_tok, for_tok, hexa_integer_const, of, hexa_real_const, record, case_tok, to
+
+
+non terminal PRG, BLQ, DCLLIST, SENTLIST;
+non terminal DCL, DEFCTE, CTELIST, SIMPVALUE, DEFVAR, DEFVARLIST, VARLIST, DEFPROC, DEFFUN, FORMAL_PARAMLIST, FORMAL_PARAM, TBAS;
+non terminal SENT, ASIG, ID, EXP, OP, OPCOMP, OPARIT, OPLOG, FACTOR, SUBPARAMLIST, EXPLIST, PROC_CALL, EXEBLQ, DCLLIST_BLQ, DCL_BLQ;
+
+precedence left lt;
+precedence left gt;
+precedence left le;
+precedence left ge;
+precedence left equal;
+precedence left not_equal;
+precedence left plus;
+precedence left minus;
+precedence left multip;
+precedence left div;
+precedence left mod;
+precedence left or;
+precedence left not;
+precedence left and;
+
+/*Main Grammar*/
+PRG ::=		 		program identifier semicolon BLQ dot;
+BLQ ::= 			DCLLIST begin SENTLIST end;
+DCLLIST ::= 		DCLLIST DCL | ;
+SENTLIST ::= 		SENT | SENTLIST SENT;
+
+/* Declaration's zone */
+DCL ::= 			DEFCTE | DEFVAR | DEFPROC | DEFFUN;
+
+DEFCTE ::= 			const CTELIST;
+CTELIST ::= 		identifier equal SIMPVALUE semicolon;
+SIMPVALUE ::=		numeric_integer_const | numeric_real_const | string_const;
+
+DEFVAR ::=			var DEFVARLIST semicolon;
+DEFVARLIST ::= 		VARLIST two_points TBAS | 
+					DEFVARLIST semicolon VARLIST two_points TBAS;
+VARLIST ::=			identifier | identifier coma VARLIST;
+
+DEFPROC ::= 		procedure identifier FORMAL_PARAMLIST semicolon BLQ semicolon;
+DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points TBAS semicolon BLQ semicolon;
+FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | ;
+FORMAL_PARAM ::=	VARLIST two_points TBAS | VARLIST two_points TBAS semicolon FORMAL_PARAM;
+
+TBAS ::=			integer | real | character;
+
+/* Sentencies zone */
+SENT ::= 			ASIG semicolon | PROC_CALL semicolon | EXEBLQ;
+
+ASIG ::=			ID assignment EXP;
+ID ::= 				identifier;
+EXP ::=				EXP OP EXP | FACTOR;
+OP ::= 				OPCOMP | OPLOG | OPARIT;
+OPCOMP ::= 			lt | gt | le | ge | equal | not_equal;
+OPARIT ::= 			plus | minus |multip | div | mod;
+OPLOG ::= 			or | and;				
+FACTOR ::= 			SIMPVALUE | not FACTOR | open_parenthesis EXP closed_parenthesis
+					| identifier SUBPARAMLIST;
+SUBPARAMLIST ::= 	open_parenthesis EXPLIST closed_parenthesis | ;
+EXPLIST ::=			EXP | EXP coma EXPLIST;
+
+PROC_CALL ::=		identifier SUBPARAMLIST;
+
+EXEBLQ ::= 			DCLLIST_BLQ begin SENTLIST end;
+DCLLIST_BLQ ::=		DCLLIST_BLQ semicolon DCL_BLQ | ;
+DCL_BLQ ::= 		DEFCTE | DEFVAR;
+
+				
