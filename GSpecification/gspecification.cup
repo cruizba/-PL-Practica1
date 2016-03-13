@@ -20,12 +20,12 @@ parser code{:
 	}
 :};
 
-terminal program, begin, end, const, var, procedure, function;
+terminal program, begin, end, const_tok, var, procedure, function;
 terminal integer, real, character;
 terminal two_points, semicolon, dot, coma, equal, open_parenthesis, closed_parenthesis, assignment, lt, gt, le, ge;
 terminal not_equal, plus, minus, multip, div, mod, or, and, not;
 terminal identifier, numeric_integer_const, numeric_real_const, string_const;
-// terminal array, type, while_tok, do_tok, then, if_tok, for_tok, hexa_integer_const, of, hexa_real_const, record, case_tok, to
+// terminal array, type, while_tok, do_tok, then, if_tok, for_tok, record, case_tok, to
 
 
 non terminal PRG, BLQ, DCLLIST, SENTLIST;
@@ -56,7 +56,7 @@ SENTLIST ::= 		SENT | SENTLIST SENT;
 /* Declaration's zone */
 DCL ::= 			DEFCTE | DEFVAR | DEFPROC | DEFFUN;
 
-DEFCTE ::= 			const CTELIST;
+DEFCTE ::= 			const_tok CTELIST;
 CTELIST ::= 		identifier equal SIMPVALUE semicolon;
 SIMPVALUE ::=		numeric_integer_const | numeric_real_const | string_const;
 

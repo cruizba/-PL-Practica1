@@ -6,7 +6,7 @@
 /********************************************************************/
 /********************************************************************/
 
-import java_cup.runtime.*
+import java_cup.runtime.*;
 %%
 /*-*
  * LEXICAL FUNCTIONS:
@@ -22,7 +22,7 @@ import java_cup.runtime.*
 Integer = [+-]?[0-9]+
 HexaInteger = [$]?[A-F0-9]+
 Real = [+-]?[0-9]+.[0-9]+
-HexaReal = [+-]?[A-F0-9]+.[A-F0-9]+
+HexaReal = [$]?[+-]?[A-F0-9]+.[A-F0-9]+
 
 //Regular expression to identify "identifier"
 Ident = [A-Za-z_][A-Za-z_0-9]+
@@ -58,21 +58,21 @@ Tab = \t
 		"program" 	{return new Symbol(sym.program, yyline, yycolumn, yytext());}
 		"begin" 	{return new Symbol(sym.begin, yyline, yycolumn, yytext());}
 		"end" 		{return new Symbol(sym.end, yyline, yycolumn, yytext());}
-		"const" 	{return new Symbol(sym.const, yyline, yycolumn, yytext());}
+		"const" 	{return new Symbol(sym.const_tok, yyline, yycolumn, yytext());}
 		"var" 		{return new Symbol(sym.var, yyline, yycolumn, yytext());}
 		"procedure" {return new Symbol(sym.procedure, yyline, yycolumn, yytext());}
 		"function" 	{return new Symbol(sym.function, yyline, yycolumn, yytext());}
-		"type" 		{return new Symbol(sym.type, yyline, yycolumn, yytext());}
-		"array" 	{return new Symbol(sym.array, yyline, yycolumn, yytext());}
-		"of" 		{return new Symbol(sym.of, yyline, yycolumn, yytext());}
-		"record"	{return new Symbol(sym.record, yyline, yycolumn, yytext());}
-		"if" 		{return new Symbol(sym.if_tok, yyline, yycolumn, yytext());}
-		"then" 		{return new Symbol(sym.then, yyline, yycolumn, yytext());}
-		"while" 	{return new Symbol(sym.while_tok, yyline, yycolumn, yytext());}
-		"do" 		{return new Symbol(sym.do_tok, yyline, yycolumn, yytext());}
-		"for" 		{return new Symbol(sym.for_tok, yyline, yycolumn, yytext());}
-		"to" 		{return new Symbol(sym.to, yyline, yycolumn, yytext());}
-		"case" 		{return new Symbol(sym.case_tok, yyline, yycolumn, yytext());}
+		//"type" 		{return new Symbol(sym.type, yyline, yycolumn, yytext());}
+		//"array" 	{return new Symbol(sym.array, yyline, yycolumn, yytext());}
+		//"of" 		{return new Symbol(sym.of, yyline, yycolumn, yytext());}
+		//"record"	{return new Symbol(sym.record, yyline, yycolumn, yytext());}
+		//"if" 		{return new Symbol(sym.if_tok, yyline, yycolumn, yytext());}
+		//"then" 		{return new Symbol(sym.then, yyline, yycolumn, yytext());}
+		//"while" 	{return new Symbol(sym.while_tok, yyline, yycolumn, yytext());}
+		//"do" 		{return new Symbol(sym.do_tok, yyline, yycolumn, yytext());}
+		//"for" 		{return new Symbol(sym.for_tok, yyline, yycolumn, yytext());}
+		//"to" 		{return new Symbol(sym.to, yyline, yycolumn, yytext());}
+		//"case" 		{return new Symbol(sym.case_tok, yyline, yycolumn, yytext());}
 		"INTEGER" 	{return new Symbol(sym.integer, yyline, yycolumn, yytext());}
 		"REAL" 		{return new Symbol(sym.real, yyline, yycolumn, yytext());}
 		"CHARACTER" {return new Symbol(sym.character, yyline, yycolumn, yytext());}
@@ -104,8 +104,8 @@ Tab = \t
 		{Integer} 	{return new Symbol(sym.numeric_integer_const, yyline, yycolumn, yytext());}
 		{Real}		{return new Symbol(sym.numeric_real_const, yyline, yycolumn, yytext());}
 		{HexaInteger} 
-					{return new Symbol(sym.hexa_real_const, yyline, yycolumn, yytext());}
-		{HexaReal} 	{return new Symbol(sym.hexa_integer_const, yyline, yycolumn, yytext());}
+					{return new Symbol(sym.numeric_integer_const, yyline, yycolumn, yytext());}
+		{HexaReal} 	{return new Symbol(sym.numeric_real_const, yyline, yycolumn, yytext());}
 		{Str} 		{return new Symbol(sym.string_const, yyline, yycolumn, yytext());}
 		{EndLine} {}
 		{Space} {}

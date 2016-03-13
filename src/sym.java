@@ -40,8 +40,8 @@ public class sym {
   public static final int string_const = 36;
   public static final int div = 28;
   public static final int semicolon = 13;
+  public static final int const_tok = 5;
   public static final int dot = 14;
-  public static final int const = 5;
   public static final int open_parenthesis = 17;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -49,7 +49,7 @@ public class sym {
   "program",
   "begin",
   "end",
-  "const",
+  "const_tok",
   "var",
   "procedure",
   "function",
