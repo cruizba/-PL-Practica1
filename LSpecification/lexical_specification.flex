@@ -22,7 +22,7 @@ import java_cup.runtime.*;
 Integer = [+-]?[0-9]+
 HexaInteger = [$]?[A-F0-9]+
 Real = [+-]?[0-9]+.[0-9]+
-HexaReal = [$]?[+-]?[A-F0-9]+.[A-F0-9]+
+HexaReal = [$][+-]?[A-F0-9]+.[A-F0-9]+
 
 //Regular expression to identify "identifier"
 Ident = [A-Za-z_][A-Za-z_0-9]+

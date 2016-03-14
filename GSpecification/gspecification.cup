@@ -32,6 +32,9 @@ non terminal PRG, BLQ, DCLLIST, SENTLIST;
 non terminal DCL, DEFCTE, CTELIST, SIMPVALUE, DEFVAR, DEFVARLIST, VARLIST, DEFPROC, DEFFUN, FORMAL_PARAMLIST, FORMAL_PARAM, TBAS;
 non terminal SENT, ASIG, ID, EXP, OP, OPCOMP, OPARIT, OPLOG, FACTOR, SUBPARAMLIST, EXPLIST, PROC_CALL, EXEBLQ, DCLLIST_BLQ, DCL_BLQ;
 
+/*Necesitamos darle un orden de preferencia en algunos casos a cup para que no surjan conflictos
+aunque estos ordenes de preferencia noo tengas importancia en cuanto al resultado */
+
 precedence left lt;
 precedence left gt;
 precedence left le;
@@ -47,30 +50,44 @@ precedence left or;
 precedence left not;
 precedence left and;
 
+/* Le damos prioridad al error */
+precedence left error;
+
+/*Ordenes de preferencia para las definiciones de variables */
+precedence left const_tok, var, procedure, function;
+precedence left identifier;
+
+
+
 /*Main Grammar*/
-PRG ::=		 		program identifier semicolon BLQ dot;
-BLQ ::= 			DCLLIST begin SENTLIST end;
+PRG ::=		 		program identifier semicolon BLQ dot | error semicolon BLQ dot | error BLQ dot;
+BLQ ::= 			DCLLIST begin SENTLIST end | error SENTLIST end;
 DCLLIST ::= 		DCLLIST DCL | ;
 SENTLIST ::= 		SENT | SENTLIST SENT;
 
 /* Declaration's zone */
-DCL ::= 			DEFCTE | DEFVAR | DEFPROC | DEFFUN;
+DCL ::= 			DEFCTE | DEFVAR | DEFPROC | DEFFUN | error semicolon;
 
 DEFCTE ::= 			const_tok CTELIST;
-CTELIST ::= 		identifier equal SIMPVALUE semicolon;
+CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SIMPVALUE semicolon
+					| error semicolon;
+// Poner mensaje
 SIMPVALUE ::=		numeric_integer_const | numeric_real_const | string_const;
 
 DEFVAR ::=			var DEFVARLIST semicolon;
+//Poner mensaje personalizado
 DEFVARLIST ::= 		VARLIST two_points TBAS | 
 					DEFVARLIST semicolon VARLIST two_points TBAS;
+//Poner mensaje persobalizado
 VARLIST ::=			identifier | identifier coma VARLIST;
 
 DEFPROC ::= 		procedure identifier FORMAL_PARAMLIST semicolon BLQ semicolon;
 DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points TBAS semicolon BLQ semicolon;
-FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | ;
+FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
 FORMAL_PARAM ::=	VARLIST two_points TBAS | VARLIST two_points TBAS semicolon FORMAL_PARAM;
 
-TBAS ::=			integer | real | character;
+TBAS ::=			integer | real | character ;
+
 
 /* Sentencies zone */
 SENT ::= 			ASIG semicolon | PROC_CALL semicolon | EXEBLQ;
