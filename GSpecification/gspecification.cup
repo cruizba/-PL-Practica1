@@ -8,15 +8,18 @@
 
 import java_cup.runtime.*;
 parser code{:
+
+	int error_id = 0;
+
 	@Override 
 	public void syntax_error(Symbol s) { 
 		int l = s.left + 1;
 		int c = s.right + 1;
-		report_error(" La Cadena: " + s.value + " Ha producido un error de sintaxis en la linea " + l + " columna " + c, null); 
+		report_error("*La Cadena: " + s.value + " Ha producido un error de sintaxis en la linea " + l + " columna " + c + "\n", null);
 	}
 	@Override 
-	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-		report_fatal_error(" La Cadena: " + s.value + " esta fuera de contexto.", null); 
+	public void unrecovered_syntax_error(Symbol s){
+		
 	}
 :};
 
@@ -33,7 +36,7 @@ non terminal DCL, DEFCTE, CTELIST, SIMPVALUE, DEFVAR, DEFVARLIST, VARLIST, DEFPR
 non terminal SENT, ASIG, ID, EXP, OP, OPCOMP, OPARIT, OPLOG, FACTOR, SUBPARAMLIST, EXPLIST, PROC_CALL, EXEBLQ, DCLLIST_BLQ, DCL_BLQ;
 
 /*Necesitamos darle un orden de preferencia en algunos casos a cup para que no surjan conflictos
-aunque estos ordenes de preferencia noo tengas importancia en cuanto al resultado */
+aunque estos ordenes de preferencia no tengan importancia en cuanto al resultado */
 
 precedence left lt;
 precedence left gt;
@@ -50,47 +53,40 @@ precedence left or;
 precedence left not;
 precedence left and;
 
-/* Le damos prioridad al error */
-precedence left error;
-
-/*Ordenes de preferencia para las definiciones de variables */
 precedence left const_tok, var, procedure, function;
 precedence left identifier;
 
 
 
 /*Main Grammar*/
-PRG ::=		 		program identifier semicolon BLQ dot | error semicolon BLQ dot | error BLQ dot;
-BLQ ::= 			DCLLIST begin SENTLIST end | error SENTLIST end;
+PRG ::=		 		program identifier semicolon BLQ dot |error dot;
+BLQ ::= 			DCLLIST begin SENTLIST end;
 DCLLIST ::= 		DCLLIST DCL | ;
 SENTLIST ::= 		SENT | SENTLIST SENT;
 
 /* Declaration's zone */
-DCL ::= 			DEFCTE | DEFVAR | DEFPROC | DEFFUN | error semicolon;
+DCL ::= 			DEFCTE | DEFVAR | DEFPROC | DEFFUN;
 
 DEFCTE ::= 			const_tok CTELIST;
-CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SIMPVALUE semicolon
-					| error semicolon;
-// Poner mensaje
+CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SIMPVALUE semicolon 
+					|error semicolon;
 SIMPVALUE ::=		numeric_integer_const | numeric_real_const | string_const;
 
-DEFVAR ::=			var DEFVARLIST semicolon;
-//Poner mensaje personalizado
+DEFVAR ::=			var DEFVARLIST semicolon | error semicolon;
 DEFVARLIST ::= 		VARLIST two_points TBAS | 
 					DEFVARLIST semicolon VARLIST two_points TBAS;
-//Poner mensaje persobalizado
-VARLIST ::=			identifier | identifier coma VARLIST;
+VARLIST ::=			identifier | identifier coma VARLIST; 
 
 DEFPROC ::= 		procedure identifier FORMAL_PARAMLIST semicolon BLQ semicolon;
 DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points TBAS semicolon BLQ semicolon;
 FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
 FORMAL_PARAM ::=	VARLIST two_points TBAS | VARLIST two_points TBAS semicolon FORMAL_PARAM;
 
-TBAS ::=			integer | real | character ;
+TBAS ::=			integer | real | character;
 
 
 /* Sentencies zone */
-SENT ::= 			ASIG semicolon | PROC_CALL semicolon | EXEBLQ;
+SENT ::= 			ASIG semicolon | PROC_CALL semicolon | EXEBLQ | error semicolon SENT;
 
 ASIG ::=			ID assignment EXP;
 ID ::= 				identifier;
@@ -106,7 +102,7 @@ EXPLIST ::=			EXP | EXP coma EXPLIST;
 
 PROC_CALL ::=		identifier SUBPARAMLIST;
 
-EXEBLQ ::= 			DCLLIST_BLQ begin SENTLIST end;
+EXEBLQ ::= 			DCLLIST_BLQ begin SENTLIST end |error end;
 DCLLIST_BLQ ::=		DCLLIST_BLQ semicolon DCL_BLQ | ;
 DCL_BLQ ::= 		DEFCTE | DEFVAR;
 

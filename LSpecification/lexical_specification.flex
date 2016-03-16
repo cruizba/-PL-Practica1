@@ -43,7 +43,7 @@ FinishCom = ((\*\))|(\}))
 
 //Regular expression to identify the end of line
 EndLine = \r | \n | \r\n
-Space = " "
+Space = \s
 Tab = \t
 
 %state comment
