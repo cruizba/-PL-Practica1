@@ -1,7 +1,7 @@
 
 /********************************************************************/
 /********************************************************************/
-/***** 		Autores: Carlos Ruiz Ballesteros (GII + MAT)		*****/
+/***** 		Autores: Carlos Ruiz Ballesteros (GII + GIS)		*****/
 /*****			 Hector Ruiz Poveda	(GII + GIS)      			*****/
 /********************************************************************/
 /********************************************************************/
@@ -25,7 +25,7 @@ Real = [+-]?[0-9]+.[0-9]+
 HexaReal = [$][+-]?[A-F0-9]+.[A-F0-9]+
 
 //Regular expression to identify "identifier"
-Ident = [A-Za-z_][A-Za-z_0-9]+
+Ident = [A-Za-z_][A-Za-z_0-9]+|[A-Za-z]
 
 //Regular expression to identify "string_const"
 
@@ -62,20 +62,22 @@ Tab = \t
 		"var" 		{return new Symbol(sym.var, yyline, yycolumn, yytext());}
 		"procedure" {return new Symbol(sym.procedure, yyline, yycolumn, yytext());}
 		"function" 	{return new Symbol(sym.function, yyline, yycolumn, yytext());}
-		//"type" 		{return new Symbol(sym.type, yyline, yycolumn, yytext());}
-		//"array" 	{return new Symbol(sym.array, yyline, yycolumn, yytext());}
-		//"of" 		{return new Symbol(sym.of, yyline, yycolumn, yytext());}
+		"type" 		{return new Symbol(sym.type, yyline, yycolumn, yytext());}
+		"array" 	{return new Symbol(sym.array, yyline, yycolumn, yytext());}
+		"of" 		{return new Symbol(sym.of, yyline, yycolumn, yytext());}
 		//"record"	{return new Symbol(sym.record, yyline, yycolumn, yytext());}
-		//"if" 		{return new Symbol(sym.if_tok, yyline, yycolumn, yytext());}
-		//"then" 		{return new Symbol(sym.then, yyline, yycolumn, yytext());}
-		//"while" 	{return new Symbol(sym.while_tok, yyline, yycolumn, yytext());}
-		//"do" 		{return new Symbol(sym.do_tok, yyline, yycolumn, yytext());}
-		//"for" 		{return new Symbol(sym.for_tok, yyline, yycolumn, yytext());}
-		//"to" 		{return new Symbol(sym.to, yyline, yycolumn, yytext());}
-		//"case" 		{return new Symbol(sym.case_tok, yyline, yycolumn, yytext());}
+		"if" 		{return new Symbol(sym.if_tok, yyline, yycolumn, yytext());}
+		"then" 		{return new Symbol(sym.then_tok, yyline, yycolumn, yytext());}
+		"else"		{return new Symbol(sym.else_tok, yyline, yycolumn, yytext());}
+		"while" 	{return new Symbol(sym.while_tok, yyline, yycolumn, yytext());}
+		"do" 		{return new Symbol(sym.do_tok, yyline, yycolumn, yytext());}
+		"for" 		{return new Symbol(sym.for_tok, yyline, yycolumn, yytext());}
+		"to" 		{return new Symbol(sym.to, yyline, yycolumn, yytext());}
+		"case" 		{return new Symbol(sym.case_tok, yyline, yycolumn, yytext());}
 		"INTEGER" 	{return new Symbol(sym.integer, yyline, yycolumn, yytext());}
 		"REAL" 		{return new Symbol(sym.real, yyline, yycolumn, yytext());}
 		"CHARACTER" {return new Symbol(sym.character, yyline, yycolumn, yytext());}
+
 
 		/* Other symbols */
 		":" 		{return new Symbol(sym.two_points, yyline, yycolumn, yytext());}

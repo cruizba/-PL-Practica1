@@ -1,6 +1,6 @@
 /********************************************************************/
 /********************************************************************/
-/***** 		Autores: Carlos Ruiz Ballesteros (GII + MAT)		*****/
+/***** 		Autores: Carlos Ruiz Ballesteros (GII + GIS)		*****/
 /*****			 Hector Ruiz Poveda	(GII + GIS)      			*****/
 /********************************************************************/
 /********************************************************************/
@@ -9,13 +9,45 @@
 import java_cup.runtime.*;
 parser code{:
 
-	int error_id = 0;
+	//Poner en la memoria:
+	//Estas dos variables son para detectar en las expresiones que tipo de valor devuelve
+	//Al encontrar un token de tipo "+" "<"... segun estemos en una condicion if, o en un
+	//case te informa si la expresion es incorrecta
+	//por ejemplo si pones if (1 + 2), te devuelve un "expected boolean in ..."
+	boolean if_expression = false;
+	boolean case_expression = false;
 
+	//Método para informar de error en un if
+	//Este método es llamado si se recibe un token artimético
+	public void error_if_exp(String s, int l, int c){
+		//Si está a true estamos dentro de un if
+		if(if_expression){
+			l++;
+			c++;
+			report_error("Boolean expression expected. Line " + l + ", row " + c + "\n", null);
+		}
+	}
+
+	//Método para informar de un error en un case
+	// se activa al recibir un token de comparacion "<" ">" ...
+	//los case según el enunciado solo pueden recibir enteros
+	public void error_case_exp(String s, int l, int c){
+		//Si está a true, estamos dentro de un case
+		if(case_expression){
+			l++;
+			c++;
+			report_error("Boolean expression expected. Line " + l + ", row " + c + "\n", null);
+		}
+	}
+
+	//Poner en la memoria. Es un método que es llamado automáticamente al haber
+	//un error en la gramática, con el que informamos de la linea y la columna
+	//en el que se encuentra.
 	@Override 
 	public void syntax_error(Symbol s) { 
 		int l = s.left + 1;
 		int c = s.right + 1;
-		report_error("*La Cadena: " + s.value + " Ha producido un error de sintaxis en la linea " + l + " columna " + c + "\n", null);
+		report_error("*The String: " + s.value + " has produced a syntax error. Line " + l + ", row " + c + "\n", null);
 	}
 	@Override 
 	public void unrecovered_syntax_error(Symbol s){
@@ -28,15 +60,13 @@ terminal integer, real, character;
 terminal two_points, semicolon, dot, coma, equal, open_parenthesis, closed_parenthesis, assignment, lt, gt, le, ge;
 terminal not_equal, plus, minus, multip, div, mod, or, and, not;
 terminal identifier, numeric_integer_const, numeric_real_const, string_const;
-// terminal array, type, while_tok, do_tok, then, if_tok, for_tok, record, case_tok, to
-
+terminal if_tok, then_tok, else_tok, while_tok, do_tok, for_tok, to, case_tok, of, type, array, square_bracket_open, square_bracket_close, double_dot, record;
 
 non terminal PRG, BLQ, DCLLIST, SENTLIST;
 non terminal DCL, DEFCTE, CTELIST, SIMPVALUE, DEFVAR, DEFVARLIST, VARLIST, DEFPROC, DEFFUN, FORMAL_PARAMLIST, FORMAL_PARAM, TBAS;
 non terminal SENT, ASIG, ID, EXP, OP, OPCOMP, OPARIT, OPLOG, FACTOR, SUBPARAMLIST, EXPLIST, PROC_CALL, EXEBLQ, DCLLIST_BLQ, DCL_BLQ;
+non terminal COND, ELSECOND, WLOOP, FLOOP, CASE, CASELIST, ALLTYPES, DEFTYPE, TYPELIST, UDTYPE, DEFRANG;
 
-/*Necesitamos darle un orden de preferencia en algunos casos a cup para que no surjan conflictos
-aunque estos ordenes de preferencia no tengan importancia en cuanto al resultado */
 
 precedence left lt;
 precedence left gt;
@@ -52,10 +82,7 @@ precedence left mod;
 precedence left or;
 precedence left not;
 precedence left and;
-
-precedence left const_tok, var, procedure, function;
-precedence left identifier;
-
+precedence left else_tok, if_tok;
 
 
 /*Main Grammar*/
@@ -65,7 +92,7 @@ DCLLIST ::= 		DCLLIST DCL | ;
 SENTLIST ::= 		SENT | SENTLIST SENT;
 
 /* Declaration's zone */
-DCL ::= 			DEFCTE | DEFVAR | DEFPROC | DEFFUN;
+DCL ::= 			DEFCTE | DEFVAR | DEFPROC | DEFFUN | DEFTYPE;
 
 DEFCTE ::= 			const_tok CTELIST;
 CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SIMPVALUE semicolon 
@@ -73,30 +100,44 @@ CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SI
 SIMPVALUE ::=		numeric_integer_const | numeric_real_const | string_const;
 
 DEFVAR ::=			var DEFVARLIST semicolon | error semicolon;
-DEFVARLIST ::= 		VARLIST two_points TBAS | 
-					DEFVARLIST semicolon VARLIST two_points TBAS;
+DEFVARLIST ::= 		VARLIST two_points ALLTYPES | 
+					DEFVARLIST semicolon VARLIST two_points ALLTYPES;
 VARLIST ::=			identifier | identifier coma VARLIST; 
 
 DEFPROC ::= 		procedure identifier FORMAL_PARAMLIST semicolon BLQ semicolon;
-DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points TBAS semicolon BLQ semicolon;
+DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points ALLTYPES semicolon BLQ semicolon;
 FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
-FORMAL_PARAM ::=	VARLIST two_points TBAS | VARLIST two_points TBAS semicolon FORMAL_PARAM;
+FORMAL_PARAM ::=	VARLIST two_points ALLTYPES | VARLIST two_points FORMAL_PARAM semicolon FORMAL_PARAM;
 
 TBAS ::=			integer | real | character;
 
 
 /* Sentencies zone */
-SENT ::= 			ASIG semicolon | PROC_CALL semicolon | EXEBLQ | error semicolon SENT;
+SENT ::= 			ASIG semicolon | PROC_CALL semicolon | EXEBLQ
+					| COND | WLOOP | FLOOP | CASE| error semicolon SENT;
 
 ASIG ::=			ID assignment EXP;
-ID ::= 				identifier;
+ID ::= 				identifier | identifier square_bracket_open EXP square_bracket_close
+					|identifier dot identifier;
 EXP ::=				EXP OP EXP | FACTOR;
 OP ::= 				OPCOMP | OPLOG | OPARIT;
-OPCOMP ::= 			lt | gt | le | ge | equal | not_equal;
-OPARIT ::= 			plus | minus |multip | div | mod;
-OPLOG ::= 			or | and;				
+OPCOMP ::= 			lt:l{:error_case_exp((String)l, lleft, lright);:}
+					| gt:g {:error_case_exp((String)g, gleft, gright);:}
+					| le:le{:error_case_exp((String)le, leleft, leright);:}
+					| ge:ge{:error_case_exp((String)ge, geleft, geright);:}
+					| equal:eq{:error_case_exp((String)eq, eqleft, eqright);:}
+					| not_equal:not_eq {:error_case_exp((String)not_eq, not_eqleft, not_eqright);:};
+// if we are in a condition, we check if the expression return a boolean value
+OPARIT ::= 			plus:p{:error_if_exp((String) p, pleft, pright);:}
+					| minus:m{:error_if_exp((String) m, mleft, mright);:}
+					|multip:m{:error_if_exp((String) m, mleft, mright);:}
+					| div:d{:error_if_exp((String) d, dleft, dright);:}
+					| mod:m{:error_if_exp((String) m, mleft, mright);:};
+OPLOG ::= 			or:o {:error_case_exp((String)o, oleft, oright);:}
+					| and:a{:error_case_exp((String)a, aleft, aright);:};				
 FACTOR ::= 			SIMPVALUE | not FACTOR | open_parenthesis EXP closed_parenthesis
-					| identifier SUBPARAMLIST;
+					| identifier SUBPARAMLIST | identifier square_bracket_open EXP square_bracket_close
+					| identifier dot identifier;
 SUBPARAMLIST ::= 	open_parenthesis EXPLIST closed_parenthesis | ;
 EXPLIST ::=			EXP | EXP coma EXPLIST;
 
@@ -106,4 +147,28 @@ EXEBLQ ::= 			DCLLIST_BLQ begin SENTLIST end |error end;
 DCLLIST_BLQ ::=		DCLLIST_BLQ semicolon DCL_BLQ | ;
 DCL_BLQ ::= 		DEFCTE | DEFVAR;
 
-				
+COND ::=			if_tok{:if_expression = true;:} EXP then_tok{:if_expression = false;:} SENT ELSECOND;
+ELSECOND ::= 		else_tok SENT| ;
+
+WLOOP ::= 			while_tok{:if_expression = true;:} EXP do_tok{:if_expression = false;:} SENT;
+
+FLOOP ::= 			for_tok identifier assignment EXP to EXP do_tok SENT;
+
+CASE ::=			case_tok{:case_expression = true;:} EXP of{:case_expression = false;:} CASELIST end;
+// Poner en la memoria que sobraba el punto y coma de la gramatica
+// CASELIST ::= EXP ":" SENT ";" | EXP ":" SENT ";" CASELIST
+CASELIST ::= 		EXP two_points SENT | EXP two_points SENT CASELIST;
+
+DEFTYPE ::= 		type TYPELIST error semicolon;
+TYPELIST ::= 		identifier equal UDTYPE semicolon
+					| identifier equal UDTYPE semicolon TYPELIST;
+//Poner en memoria DEFRANG:
+//Regla hecha para recuperarse de errores correctamene. Si surge un error en el rango, buscamos un corchete
+// cerrado. Si no lo hay ejecutamos directamente ALLTYPES
+DEFRANG ::=			square_bracket_open SIMPVALUE double_dot SIMPVALUE square_bracket_close
+					| error square_bracket_close| error ALLTYPES;
+
+UDTYPE ::= 			array  DEFRANG of ALLTYPES | record DEFVARLIST end;
+
+ALLTYPES ::= 		TBAS | identifier;
+
