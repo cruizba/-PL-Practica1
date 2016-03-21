@@ -65,7 +65,7 @@ Tab = \t
 		"type" 		{return new Symbol(sym.type, yyline, yycolumn, yytext());}
 		"array" 	{return new Symbol(sym.array, yyline, yycolumn, yytext());}
 		"of" 		{return new Symbol(sym.of, yyline, yycolumn, yytext());}
-		//"record"	{return new Symbol(sym.record, yyline, yycolumn, yytext());}
+		"record"	{return new Symbol(sym.record, yyline, yycolumn, yytext());}
 		"if" 		{return new Symbol(sym.if_tok, yyline, yycolumn, yytext());}
 		"then" 		{return new Symbol(sym.then_tok, yyline, yycolumn, yytext());}
 		"else"		{return new Symbol(sym.else_tok, yyline, yycolumn, yytext());}
@@ -87,6 +87,9 @@ Tab = \t
 		"=" 		{return new Symbol(sym.equal, yyline, yycolumn, yytext());}
 		"(" 		{return new Symbol(sym.open_parenthesis, yyline, yycolumn, yytext());}
 		")" 		{return new Symbol(sym.closed_parenthesis, yyline, yycolumn, yytext());}
+		"["			{return new Symbol(sym.square_bracket_open, yyline, yycolumn, yytext());}
+		"]"			{return new Symbol(sym.square_bracket_close, yyline, yycolumn, yytext());}
+		".."		{return new Symbol(sym.double_dot, yyline, yycolumn, yytext());}
 		":=" 		{return new Symbol(sym.assignment, yyline, yycolumn, yytext());}
 		"<" 		{return new Symbol(sym.lt, yyline, yycolumn, yytext());}
 		">" 		{return new Symbol(sym.gt, yyline, yycolumn, yytext());}
@@ -114,13 +117,16 @@ Tab = \t
 		{Tab} {}
 		{StartComm} {
 			System.out.println("Inicio de comentario");
-			yybegin(comment);}	
+			yybegin(comment);
+		}	
 	}
 	
 	<comment>{
 		{FinishCom} {
 			System.out.println("Fin de comentario");
-			yybegin(YYINITIAL);}
+			yybegin(YYINITIAL);
+		}
+		. {}
 	}
 	
 	

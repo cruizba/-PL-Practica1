@@ -107,7 +107,7 @@ VARLIST ::=			identifier | identifier coma VARLIST;
 DEFPROC ::= 		procedure identifier FORMAL_PARAMLIST semicolon BLQ semicolon;
 DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points ALLTYPES semicolon BLQ semicolon;
 FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
-FORMAL_PARAM ::=	VARLIST two_points ALLTYPES | VARLIST two_points FORMAL_PARAM semicolon FORMAL_PARAM;
+FORMAL_PARAM ::=	VARLIST two_points ALLTYPES | VARLIST two_points FORMAL_PARAM semicolon FORMAL_PARAM| ;
 
 TBAS ::=			integer | real | character;
 
@@ -159,7 +159,7 @@ CASE ::=			case_tok{:case_expression = true;:} EXP of{:case_expression = false;:
 // CASELIST ::= EXP ":" SENT ";" | EXP ":" SENT ";" CASELIST
 CASELIST ::= 		EXP two_points SENT | EXP two_points SENT CASELIST;
 
-DEFTYPE ::= 		type TYPELIST error semicolon;
+DEFTYPE ::= 		type TYPELIST;
 TYPELIST ::= 		identifier equal UDTYPE semicolon
 					| identifier equal UDTYPE semicolon TYPELIST;
 //Poner en memoria DEFRANG:
