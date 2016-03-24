@@ -1,4 +1,5 @@
 
+import java.awt.Dimension;
 import java.io.PrintStream;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -19,8 +20,12 @@ public class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
     public Main() {
+        route = null;
         initComponents();
+        this.setLocationRelativeTo(null);
         this.setTitle("Analizador léxico/sintáctico");
+        Dimension min = new Dimension(345, 280);
+        this.setMinimumSize(min);
         //Use consoleText as console
         PrintStream out = new PrintStream(new TextAreaOutputStream(consoleText));
         System.setOut(out);
@@ -45,8 +50,16 @@ public class Main extends javax.swing.JFrame {
         nameLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(290, 262));
+
+        fileText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileTextActionPerformed(evt);
+            }
+        });
 
         openFile.setText("Abrir...");
+        openFile.setToolTipText("Selecciona el fichero para analizar.");
         openFile.setMaximumSize(new java.awt.Dimension(68, 23));
         openFile.setMinimumSize(new java.awt.Dimension(68, 23));
         openFile.setPreferredSize(new java.awt.Dimension(68, 23));
@@ -56,7 +69,8 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        exeButton.setText("Execute");
+        exeButton.setText("Iniciar análisis");
+        exeButton.setToolTipText("Inicia el análisis sintáctico y gramático del fichero seleccionado.");
         exeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exeButtonActionPerformed(evt);
@@ -78,8 +92,8 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(203, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(openFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(exeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
-                .addGap(217, 217, 217))
+                    .addComponent(exeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(217, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -93,14 +107,14 @@ public class Main extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
+                .addGap(21, 21, 21)
                 .addComponent(fileText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(openFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
                 .addComponent(exeButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1)
                 .addGap(35, 35, 35)
                 .addComponent(nameLabel))
         );
@@ -109,11 +123,11 @@ public class Main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -135,6 +149,7 @@ public class Main extends javax.swing.JFrame {
         
         AnalizadorLexico lexico = null;
         try {
+            this.route = this.fileText.getText();
             lexico =
             new AnalizadorLexico(new java.io.FileReader(this.route));
             parser sintactico = new parser(lexico);
@@ -156,6 +171,10 @@ public class Main extends javax.swing.JFrame {
 		
 		
     }//GEN-LAST:event_exeButtonActionPerformed
+
+    private void fileTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fileTextActionPerformed
 
     /**
      * @param args the command line arguments
