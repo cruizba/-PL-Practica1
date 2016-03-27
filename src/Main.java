@@ -135,7 +135,7 @@ public class Main extends javax.swing.JFrame {
 
     private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
         JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto (.txt, .pl)", "txt", "pl");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto (.txt, .pl, .pas)", "txt", "pl", "pas");
         chooser.setFileFilter(filter);
         chooser.setMultiSelectionEnabled(false);
         int returnVal = chooser.showOpenDialog(chooser);
