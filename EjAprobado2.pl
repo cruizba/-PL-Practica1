@@ -1,4 +1,4 @@
-program EJER21; 
+program EjemploAprobado2; 
 
         var T1,T2:REAL;
         var T1C,T2F:REAL;
@@ -16,4 +16,4 @@ begin
         WRITE ('TEMPERATURA EQUIVALENTE: ');
         WRITE (T2:3:0);  WRITE ('º Celsius - ');
         WRITE (T2F:3:0); WRITE ('º Fahrenheit');
-end
+end.

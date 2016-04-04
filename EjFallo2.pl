@@ -1,4 +1,4 @@
-program EjemploAprobado3;
+program EjemploFallo2;
 const
 N = 7;
 type
@@ -25,7 +25,7 @@ begin
 			aux1:=lista[j];
 			aux2:=lista[aux];
 			lista[j]:=aux2;
-			lista[aux]:=aux1;
+			lista[aux:=aux1;
 		end
 	end
 	for i:=1 to 10 do
