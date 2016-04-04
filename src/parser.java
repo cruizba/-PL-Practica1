@@ -508,7 +508,7 @@ public class parser extends java_cup.runtime.lr_parser {
 		if(if_expression){
 			l++;
 			c++;
-			report_error("Boolean expression expected. Line " + l + ", row " + c + "\n", null);
+			report_error("Boolean expression expected. Line " + l + ", column " + c + "\n", null);
 		}
 	}
 
@@ -520,7 +520,7 @@ public class parser extends java_cup.runtime.lr_parser {
 		if(case_expression){
 			l++;
 			c++;
-			report_error("Boolean expression expected. Line " + l + ", row " + c + "\n", null);
+			report_error("Boolean expression expected. Line " + l + ", column " + c + "\n", null);
 		}
 	}
 
@@ -531,7 +531,7 @@ public class parser extends java_cup.runtime.lr_parser {
 	public void syntax_error(Symbol s) { 
 		int l = s.left + 1;
 		int c = s.right + 1;
-		report_error("*The String: " + s.value + " has produced a syntax error. Line " + l + ", row " + c + "\n", null);
+		report_error("*The String: " + s.value + " has produced a syntax error. Line " + l + ", column " + c + "\n", null);
 	}
 	@Override 
 	public void unrecovered_syntax_error(Symbol s){

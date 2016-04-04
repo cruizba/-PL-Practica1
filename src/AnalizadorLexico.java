@@ -803,8 +803,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 59: break;
           case 7: 
-            { System.out.println("Inicio de comentario");
-			yybegin(comment);
+            { yybegin(comment);
             }
           case 60: break;
           case 8: 
@@ -852,8 +851,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 71: break;
           case 19: 
-            { System.out.println("Fin de comentario");
-			yybegin(YYINITIAL);
+            { yybegin(YYINITIAL);
             }
           case 72: break;
           case 20: 

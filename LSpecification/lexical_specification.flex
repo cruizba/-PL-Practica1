@@ -116,14 +116,12 @@ Tab = \t
 		{Space} {}
 		{Tab} {}
 		{StartComm} {
-			System.out.println("Inicio de comentario");
 			yybegin(comment);
 		}	
 	}
 	
 	<comment>{
 		{FinishCom} {
-			System.out.println("Fin de comentario");
 			yybegin(YYINITIAL);
 		}
 		. {}
