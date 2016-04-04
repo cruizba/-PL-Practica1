@@ -69,8 +69,8 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        exeButton.setText("Iniciar análisis");
-        exeButton.setToolTipText("Inicia el análisis sintáctico y gramático del fichero seleccionado.");
+        exeButton.setText("Iniciar analisis");
+        exeButton.setToolTipText("Inicia el analisis sintactico y gramatico del fichero seleccionado.");
         exeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exeButtonActionPerformed(evt);
