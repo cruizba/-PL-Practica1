@@ -23,7 +23,7 @@ public class Main extends javax.swing.JFrame {
         route = null;
         initComponents();
         this.setLocationRelativeTo(null);
-        this.setTitle("Analizador léxico/sintáctico");
+        this.setTitle("Analizador lexico/sintactico");
         Dimension min = new Dimension(345, 280);
         this.setMinimumSize(min);
         //Use consoleText as console
@@ -82,7 +82,7 @@ public class Main extends javax.swing.JFrame {
         consoleText.setRows(5);
         jScrollPane1.setViewportView(consoleText);
 
-        nameLabel.setText("Carlos Ruiz Ballesteros - Héctor Ruiz-Poveda Coca. GIS+GII ");
+        nameLabel.setText("Carlos Ruiz Ballesteros - Hector Ruiz-Poveda Coca. GIS+GII ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
