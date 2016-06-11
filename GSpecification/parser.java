@@ -593,7 +593,7 @@ html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4)).value;
-		html.createHTML("C:\\Users\\hecto\\Documents\\Universidad\\4 Curso\\Junio\\15-6 Procesadores de Lenguaje\\HTMLPrueba.html");
+		html.createHTML("HTMLPrueba.html");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("PRG",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

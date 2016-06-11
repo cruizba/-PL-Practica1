@@ -94,7 +94,7 @@ precedence left else_tok, if_tok;
 
 
 /*Main Grammar*/
-PRG ::=		 		program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:}semicolon BLQ dot {:html.createHTML("C:\\Users\\hecto\\Documents\\Universidad\\4 Curso\\Junio\\15-6 Procesadores de Lenguaje\\HTMLPrueba.html");:}|error dot;
+PRG ::=		 		program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:}semicolon BLQ dot {:html.createHTML("HTMLPrueba.html");:}|error dot;
 BLQ ::= 			DCLLIST begin SENTLIST end;
 DCLLIST ::= 		DCLLIST DCL | ;
 SENTLIST ::= 		SENT | SENTLIST SENT;
@@ -107,17 +107,20 @@ CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SI
 					|error semicolon;
 SIMPVALUE ::=		numeric_integer_const | numeric_real_const | string_const;
 
-DEFVAR ::=			var DEFVARLIST semicolon | error semicolon;
-DEFVARLIST ::= 		VARLIST two_points ALLTYPES | 
-					DEFVARLIST semicolon VARLIST two_points ALLTYPES;
-VARLIST ::=			identifier | identifier coma VARLIST; 
+DEFVAR ::=			var{:html.matriz.get(contador).add("<A class='palres'>var</A>");:} DEFVARLIST semicolon | error semicolon;
+DEFVARLIST ::= 		VARLIST two_points{:html.matriz.get(contador).add(":"):} ALLTYPES | 
+					DEFVARLIST semicolon{:html.matriz.add(";"):} VARLIST two_points{:html.matriz.add(":"):} ALLTYPES;
+VARLIST ::=			identifier:id{:html.matriz.add.get(contador).add("<A name'" + id + "'> \n <SPAN class='ident'>" + id +"</SPAN></A>");:} 
+					| identifier:id coma {:html.matriz.add.get(contador).add("<A name'" + id + "'> \n <SPAN class='ident'>" + id + <"</SPAN>, </A>");:} VARLIST; 
 
 DEFPROC ::= 		procedure identifier FORMAL_PARAMLIST semicolon BLQ semicolon;
 DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points ALLTYPES semicolon BLQ semicolon;
 FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
 FORMAL_PARAM ::=	VARLIST two_points ALLTYPES | VARLIST two_points FORMAL_PARAM semicolon FORMAL_PARAM| ;
 
-TBAS ::=			integer | real | character;
+TBAS ::=			integer:integ{:html.matriz.get(contador).add("<A class='palres'>" + integ +"</A>"):} 
+					| real:r{:html.matriz.get(contador).add("<A class='palres'>"+ r + "</A>"):} 
+					| character:c{:html.matriz.get(contador).add("<A class='palres'>"+ c + "</A>"):};
 
 
 /* Sentencies zone */
