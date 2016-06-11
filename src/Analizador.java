@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.util.ArrayList;
 /**
 */
 public class Analizador{
@@ -11,6 +12,34 @@ public class Analizador{
 		
 	} else {
 		for (int i = 0; i < argv.length; i++) {
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
 			AnalizadorLexico lexico = null;
 			try {
 				lexico =
