@@ -97,7 +97,7 @@ DCLLIST ::= 		DCLLIST DCL | ;
 SENTLIST ::= 		SENT | SENTLIST SENT;
 
 /* Declaration's zone */
-DCL ::= 			DEFCTE | DEFVAR | DEFPROC {: html.matriz.get(contador).add(""+contador); contador++; html.matriz.add(new ArrayList<String>());:} | DEFFUN {: html.matriz.get(contador).add(""+contador); contador++; html.matriz.add(new ArrayList<String>());:} | DEFTYPE;
+DCL ::= 			DEFCTE | DEFVAR | DEFPROC {:contador++; html.matriz.add(new ArrayList<String>());:} | DEFFUN {:contador++; html.matriz.add(new ArrayList<String>());:} | DEFTYPE;
 
 DEFCTE ::= 			const_tok CTELIST;
 CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SIMPVALUE semicolon 
@@ -105,19 +105,19 @@ CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SI
 SIMPVALUE ::=		numeric_integer_const | numeric_real_const | string_const;
 
 DEFVAR ::=			var{:html.matriz.get(contador).add("<A class='palres'>var</A>");:} DEFVARLIST semicolon | error semicolon;
-DEFVARLIST ::= 		VARLIST two_points{:html.matriz.get(contador).add(":"):} ALLTYPES | 
-					DEFVARLIST semicolon{:html.matriz.add(";"):} VARLIST two_points{:html.matriz.add(":"):} ALLTYPES;
-VARLIST ::=			identifier:id{:html.matriz.add.get(contador).add("<A name'" + id + "'> \n <SPAN class='ident'>" + id +"</SPAN></A>");:} 
-					| identifier:id coma {:html.matriz.add.get(contador).add("<A name'" + id + "'> \n <SPAN class='ident'>" + id + <"</SPAN>, </A>");:} VARLIST; 
+DEFVARLIST ::= 		VARLIST two_points{:html.matriz.get(contador).add(":");:} ALLTYPES | 
+					DEFVARLIST semicolon{:html.matriz.get(contador).add(";");:} VARLIST two_points{:html.matriz.get(contador).add(":");:} ALLTYPES;
+VARLIST ::=			identifier:id{:html.matriz.get(contador).add("<A name'" + id + "'> \n <SPAN class='ident'>" + id +"</SPAN></A>");:} 
+					| identifier:id{:html.matriz.get(contador).add("<A name'" + id + "'> \n <SPAN class='ident'>" + id + "</SPAN>, </A>");:} coma VARLIST; 
 
-DEFPROC ::= 		procedure identifier:identifier {:html.matriz.get(contador).add("<A NAME=\""+identifier+"\">\n"+"<SPAN CLASS=\"palres\">procedure</SPAN> <SPAN CLASS=\"ident\">"+identifier+"</SPAN> ( "); :} FORMAL_PARAMLIST semicolon BLQ semicolon;
+DEFPROC ::= 		procedure identifier:identifier {:html.matriz.get(contador).add("<A NAME=\""+identifier+"\">\n"+"<SPAN CLASS=\"palres\">procedure</SPAN> <SPAN CLASS=\"ident\">"+identifier+"</SPAN> ( "); :} FORMAL_PARAMLIST {:html.matriz.get(contador).add(")");:}semicolon BLQ semicolon;
 DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points ALLTYPES semicolon BLQ semicolon;
 FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
 FORMAL_PARAM ::=	VARLIST two_points ALLTYPES | VARLIST two_points FORMAL_PARAM semicolon FORMAL_PARAM| ;
 
-TBAS ::=			integer:integ{:html.matriz.get(contador).add("<A class='palres'>" + integ +"</A>"):} 
-					| real:r{:html.matriz.get(contador).add("<A class='palres'>"+ r + "</A>"):} 
-					| character:c{:html.matriz.get(contador).add("<A class='palres'>"+ c + "</A>"):};
+TBAS ::=			integer:integ{:html.matriz.get(contador).add("<A class='palres'>" + integ +"</A>");:} 
+					| real:r{:html.matriz.get(contador).add("<A class='palres'>"+ r + "</A>");:} 
+					| character:c{:html.matriz.get(contador).add("<A class='palres'>"+ c + "</A>");:};
 
 
 /* Sentencies zone */
