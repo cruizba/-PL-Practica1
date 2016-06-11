@@ -92,26 +92,36 @@ precedence left else_tok, if_tok;
 
 /*Main Grammar*/
 PRG ::=		 		program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:}semicolon BLQ dot {:html.createHTML("HTMLPrueba.html");:}|error dot;
-BLQ ::= 			DCLLIST begin SENTLIST end;
+BLQ ::= 			DCLLIST begin{:html.matriz.get(contador).add("<SPAN class='palres'> begin </SPAN> \n <BR> \n");:}
+					SENTLIST end{:html.matriz.get(contador).add("<SPAN class='palres'>end</SPAN>");:};
 DCLLIST ::= 		DCLLIST DCL | ;
 SENTLIST ::= 		SENT | SENTLIST SENT;
 
 /* Declaration's zone */
 DCL ::= 			DEFCTE | DEFVAR | DEFPROC {:contador++; html.matriz.add(new ArrayList<String>());:} | DEFFUN {:contador++; html.matriz.add(new ArrayList<String>());:} | DEFTYPE;
 
-DEFCTE ::= 			const_tok CTELIST;
-CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SIMPVALUE semicolon 
+DEFCTE ::= 			const_tok:ctet {:html.matriz.get(contador).add("<SPAN class='palres'>" + ctet + "</SPAN>");:} CTELIST;
+CTELIST ::= 		identifier:id{:html.matriz.get(contador).add("<A name='"+ id + contador +"'><SPAN class='ident'>" + id + "</SPAN> =");:} equal SIMPVALUE semicolon{:html.matriz.get(contador).add("; \n <BR> \n");:} 
+					| CTELIST identifier:id{:html.matriz.get(contador).add("<A name='"+ id + contador +"'><SPAN class='ident'>" + id + "</SPAN> =");:} equal SIMPVALUE semicolon{:html.matriz.get(contador).add("; \n <BR> \n");:} 
 					|error semicolon;
-SIMPVALUE ::=		numeric_integer_const | numeric_real_const | string_const;
+SIMPVALUE ::=		numeric_integer_const:numi{:html.matriz.get(contador).add("<SPAN class='cte'>" + numi + "</SPAN>");:} | numeric_real_const:numr{:html.matriz.get(contador).add("<SPAN class='cte'>" + numr + "</SPAN>");:} | string_const:str{:html.matriz.get(contador).add("<SPAN class='cte'>" + str + "</SPAN>");:};
 
-DEFVAR ::=			var{:html.matriz.get(contador).add("<A class='palres'>var</A>");:} DEFVARLIST semicolon | error semicolon;
+DEFVAR ::=			var{:html.matriz.get(contador).add("<A class='palres'>var</A>");:} DEFVARLIST semicolon{:html.matriz.get(contador).add("; \n <BR> \n");:} | error semicolon;
 DEFVARLIST ::= 		VARLIST two_points{:html.matriz.get(contador).add(":");:} ALLTYPES | 
-					DEFVARLIST semicolon{:html.matriz.get(contador).add(";");:} VARLIST two_points{:html.matriz.get(contador).add(":");:} ALLTYPES;
-VARLIST ::=			identifier:id{:html.matriz.get(contador).add("<A name'" + id + "'> \n <SPAN class='ident'>" + id +"</SPAN></A>");:} 
-					| identifier:id{:html.matriz.get(contador).add("<A name'" + id + "'> \n <SPAN class='ident'>" + id + "</SPAN>, </A>");:} coma VARLIST; 
+					DEFVARLIST semicolon{:html.matriz.get(contador).add("; \n <BR> \n");:} VARLIST two_points{:html.matriz.get(contador).add(":");:} ALLTYPES;
+VARLIST ::=			identifier:id{:html.matriz.get(contador).add("<A name'" + id+contador + "'> \n <SPAN class='ident'>" + id +"</SPAN></A>");:} 
+					| identifier:id{:html.matriz.get(contador).add("<A name'" + id+contador + "'> \n <SPAN class='ident'>" + id + "</SPAN>, </A>");:} coma VARLIST; 
 
-DEFPROC ::= 		procedure identifier:identifier {:html.matriz.get(contador).add("<A NAME=\""+identifier+"\">\n"+"<SPAN CLASS=\"palres\">procedure</SPAN> <SPAN CLASS=\"ident\">"+identifier+"</SPAN> ( "); :} FORMAL_PARAMLIST {:html.matriz.get(contador).add(")");:}semicolon BLQ semicolon;
-DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points ALLTYPES semicolon BLQ semicolon;
+DEFPROC ::= 		procedure identifier:identifier {:html.matriz.get(contador).add("<A NAME=\""+identifier+"\">\n"+"<SPAN CLASS=\"palres\">procedure</SPAN> <SPAN CLASS=\"ident\">"+identifier+"</SPAN> ( "); :} 
+					FORMAL_PARAMLIST {:html.matriz.get(contador).add(")");:}
+					semicolon{:html.matriz.get(contador).add("; \n <BR>");:}
+					BLQ semicolon{:html.matriz.get(contador).add("; \n <BR>");:};
+
+DEFFUN ::= 			function identifier:identifier {:html.matriz.get(contador).add("<A NAME=\""+identifier+"\">\n"+"<SPAN CLASS=\"palres\">function</SPAN> <SPAN CLASS=\"ident\">"+identifier+"</SPAN> ( "); :} 
+					FORMAL_PARAMLIST {:html.matriz.get(contador).add(")");:} two_points{:html.matriz.get(contador).add(":");:}
+					ALLTYPES semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:}
+					BLQ semicolon;
+
 FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
 FORMAL_PARAM ::=	VARLIST two_points ALLTYPES | VARLIST two_points FORMAL_PARAM semicolon FORMAL_PARAM| ;
 
@@ -121,32 +131,38 @@ TBAS ::=			integer:integ{:html.matriz.get(contador).add("<A class='palres'>" + i
 
 
 /* Sentencies zone */
-SENT ::= 			ASIG semicolon | PROC_CALL semicolon | EXEBLQ
+SENT ::= 			ASIG semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:}  | PROC_CALL semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:} | EXEBLQ
 					| COND | WLOOP | FLOOP | CASE| error semicolon SENT;
 
-ASIG ::=			ID assignment EXP;
-ID ::= 				identifier | identifier square_bracket_open EXP square_bracket_close
+ASIG ::=			ID assignment{:html.matriz.get(contador).add(":=");:}  EXP;
+ID ::= 				identifier:id{:html.matriz.get(contador).add("<A href='#"+ id + contador + "'>"+ id +"</A>");:} 
+					| identifier:id square_bracket_open {:html.matriz.get(contador).add("<A href='#"+ id + contador + "'>"+ id +"</A> [");:}
+					EXP square_bracket_close{:html.matriz.get(contador).add("]");:}
 					|identifier dot identifier;
 EXP ::=				EXP OP EXP | FACTOR;
 OP ::= 				OPCOMP | OPLOG | OPARIT;
-OPCOMP ::= 			lt:l{:error_case_exp((String)l, lleft, lright);:}
-					| gt:g {:error_case_exp((String)g, gleft, gright);:}
-					| le:le{:error_case_exp((String)le, leleft, leright);:}
-					| ge:ge{:error_case_exp((String)ge, geleft, geright);:}
-					| equal:eq{:error_case_exp((String)eq, eqleft, eqright);:}
-					| not_equal:not_eq {:error_case_exp((String)not_eq, not_eqleft, not_eqright);:};
+OPCOMP ::= 			lt:l{:error_case_exp((String)l, lleft, lright); html.matriz.get(contador).add(l.toString());:}
+					| gt:g {:error_case_exp((String)g, gleft, gright); html.matriz.get(contador).add(g.toString());:}
+					| le:le{:error_case_exp((String)le, leleft, leright); html.matriz.get(contador).add(le.toString());:}
+					| ge:ge{:error_case_exp((String)ge, geleft, geright); html.matriz.get(contador).add(ge.toString());:}
+					| equal:eq{:error_case_exp((String)eq, eqleft, eqright); html.matriz.get(contador).add(eq.toString());:}
+					| not_equal:not_eq {:error_case_exp((String)not_eq, not_eqleft, not_eqright); html.matriz.get(contador).add(not_eq.toString());:};
 // if we are in a condition, we check if the expression return a boolean value
-OPARIT ::= 			plus:p{:error_if_exp((String) p, pleft, pright);:}
-					| minus:m{:error_if_exp((String) m, mleft, mright);:}
-					|multip:m{:error_if_exp((String) m, mleft, mright);:}
-					| div:d{:error_if_exp((String) d, dleft, dright);:}
-					| mod:m{:error_if_exp((String) m, mleft, mright);:};
-OPLOG ::= 			or:o {:error_case_exp((String)o, oleft, oright);:}
-					| and:a{:error_case_exp((String)a, aleft, aright);:};				
-FACTOR ::= 			SIMPVALUE | not FACTOR | open_parenthesis EXP closed_parenthesis
-					| identifier SUBPARAMLIST | identifier square_bracket_open EXP square_bracket_close
-					| identifier dot identifier;
-SUBPARAMLIST ::= 	open_parenthesis EXPLIST closed_parenthesis | ;
+OPARIT ::= 			plus:p{:error_if_exp((String) p, pleft, pright); html.matriz.get(contador).add(p.toString());:}
+					| minus:m{:error_if_exp((String) m, mleft, mright); html.matriz.get(contador).add(m.toString());:}
+					|multip:m{:error_if_exp((String) m, mleft, mright); html.matriz.get(contador).add(m.toString());:}
+					| div:d{:error_if_exp((String) d, dleft, dright); html.matriz.get(contador).add(d.toString());:}
+					| mod:m{:error_if_exp((String) m, mleft, mright); html.matriz.get(contador).add(m.toString());:};
+OPLOG ::= 			or:o {:error_case_exp((String)o, oleft, oright); html.matriz.get(contador).add("<SPAN class'palres'>" + o +"</SPAN");:}
+					| and:a{:error_case_exp((String)a, aleft, aright); html.matriz.get(contador).add("<SPAN class'palres'>" + a +"</SPAN");:};				
+FACTOR ::= 			SIMPVALUE | not FACTOR | open_parenthesis{:html.matriz.get(contador).add("(");:}  EXP closed_parenthesis{:html.matriz.get(contador).add(")");:}
+					| identifier:id{:html.matriz.get(contador).add("<A href='#"+ id + "'>"+ id +"</A>");:} SUBPARAMLIST 
+					| identifier:id{:html.matriz.get(contador).add("<A href='#"+ id + contador + "'>"+ id +"</A>");:} square_bracket_open 
+					EXP square_bracket_close{:html.matriz.get(contador).add("]");:}
+					| identifier:id1{:html.matriz.get(contador).add("<A href='#"+ id1 + contador + "'>"+ id1 +"</A>");:} 
+					dot{:html.matriz.get(contador).add(".");:} 
+					identifier:id2{:html.matriz.get(contador).add("<A href='#"+ id2 + contador + "'>"+ id2 +"</A>");:} ;
+SUBPARAMLIST ::= 	open_parenthesis{:html.matriz.get(contador).add("(");:} EXPLIST closed_parenthesis{:html.matriz.get(contador).add(")");:} | ;
 EXPLIST ::=			EXP | EXP coma EXPLIST;
 
 PROC_CALL ::=		identifier SUBPARAMLIST;
