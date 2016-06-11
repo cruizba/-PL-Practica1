@@ -10,10 +10,7 @@ import java_cup.runtime.*;
 import java.util.ArrayList;
 action code{:
 	public HTMLParser html = new HTMLParser();
-
-	public HTMLParser getHTML(){
-		return html;
-	};
+	public int contador = 2;
 :};
 parser code{:
 
@@ -94,13 +91,13 @@ precedence left else_tok, if_tok;
 
 
 /*Main Grammar*/
-PRG ::=		 		program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:}semicolon BLQ dot {:html.createHTML("C:\\Users\\hecto\\Documents\\Universidad\\4 Curso\\Junio\\15-6 Procesadores de Lenguaje\\HTMLPrueba.html");:}|error dot;
+PRG ::=		 		program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:} semicolon BLQ dot {:html.createHTML("C:\\Users\\hecto\\Documents\\Universidad\\4 Curso\\Junio\\15-6 Procesadores de Lenguaje\\HTMLPrueba.html");:}|error dot;
 BLQ ::= 			DCLLIST begin SENTLIST end;
 DCLLIST ::= 		DCLLIST DCL | ;
 SENTLIST ::= 		SENT | SENTLIST SENT;
 
 /* Declaration's zone */
-DCL ::= 			DEFCTE | DEFVAR | DEFPROC | DEFFUN | DEFTYPE;
+DCL ::= 			DEFCTE | DEFVAR | DEFPROC {: html.matriz.get(contador).add(""+contador); contador++; html.matriz.add(new ArrayList<String>());:} | DEFFUN {: html.matriz.get(contador).add(""+contador); contador++; html.matriz.add(new ArrayList<String>());:} | DEFTYPE;
 
 DEFCTE ::= 			const_tok CTELIST;
 CTELIST ::= 		identifier equal SIMPVALUE semicolon | CTELIST identifier equal SIMPVALUE semicolon 
@@ -112,7 +109,7 @@ DEFVARLIST ::= 		VARLIST two_points ALLTYPES |
 					DEFVARLIST semicolon VARLIST two_points ALLTYPES;
 VARLIST ::=			identifier | identifier coma VARLIST; 
 
-DEFPROC ::= 		procedure identifier FORMAL_PARAMLIST semicolon BLQ semicolon;
+DEFPROC ::= 		procedure identifier:identifier {:html.matriz.get(contador).add("<A NAME=\""+identifier+"\">\n"+"<SPAN CLASS=\"palres\">procedure</SPAN> <SPAN CLASS=\"ident\">"+identifier+"</SPAN> ( "); :} FORMAL_PARAMLIST semicolon BLQ semicolon;
 DEFFUN ::= 			function identifier FORMAL_PARAMLIST two_points ALLTYPES semicolon BLQ semicolon;
 FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
 FORMAL_PARAM ::=	VARLIST two_points ALLTYPES | VARLIST two_points FORMAL_PARAM semicolon FORMAL_PARAM| ;
