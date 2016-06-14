@@ -44,12 +44,47 @@ public class HTMLParser {
     public void createHTML(String ruta) throws IOException{
         File file = new File(ruta);
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        headersHTML();
         for(ArrayList<String> list: matriz){
             for(String linea: list){
                 bw.write(linea+"\n");
             }
         }
         bw.close();
+    }
+    
+    public void headersHTML(){
+    	String linea;
+    	for(int i = 2; i < matriz.size()-1; i++){
+    		String suma = "";
+    		int k = 0;
+    		boolean found = false;
+    		String toAdd = "";
+    		while(!found){
+    			linea = matriz.get(i).get(k);
+    			if(k==0){
+    				try{
+    					String namefunc = linea.substring(9).split("\"")[0];
+    					String[] sep = linea.split("<");
+    					toAdd = "<" + sep[2] + "<" + sep[3] + "<a SPAN href=\"#" + namefunc + "\"" + sep[4].substring(4) + "</a>";
+    				}catch(IndexOutOfBoundsException e){
+    					System.out.println("ERROR: linea.split no ha separado en i="+i+" k="+k);
+    					e.printStackTrace();
+    				}
+    				
+    			}
+    			if(linea.contains(";")){
+    				String parts[] = linea.split(";");
+    				found = true;
+    				toAdd = parts[0]+";";
+    			}else if (k != 0){
+    				toAdd = linea;
+    			}
+    			suma += toAdd;
+    			k++;
+    		}
+    		matriz.get(1).add(suma+"\n<br>\n");
+    	}
     }
     
 }
