@@ -35,7 +35,8 @@ public class HTMLParser {
         matriz.get(0).add("");
         matriz.get(0).add("<BODY>");
         matriz.get(0).add("<A NAME=\"inicio\">");
-        
+        matriz.add(new ArrayList<String>());
+        matriz.add(new ArrayList<String>());
 
     }
     

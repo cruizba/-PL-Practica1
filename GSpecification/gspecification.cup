@@ -11,6 +11,9 @@ import java.util.ArrayList;
 action code{:
 	public HTMLParser html = new HTMLParser();
 	public int contador = 2;
+
+	public double textIndent = 0;
+	public double indentFactor = 0.5;
 :};
 parser code{:
 
@@ -94,10 +97,17 @@ precedence left begin;
 
 /*Main Grammar*/
 PRG ::=		 		program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:}semicolon BLQ dot {:html.createHTML("HTMLPrueba.html");:}|error dot;
-BLQ ::= 			DCLLIST begin{:html.matriz.get(contador).add("<SPAN class='palres'> begin </SPAN> \n <BR> \n");:}
-					SENTLIST end{:html.matriz.get(contador).add("<SPAN class='palres'>end</SPAN>");:};
+BLQ ::= 			DCLLIST begin{:
+						html.matriz.get(contador).add("<SPAN class='palres'> begin </SPAN> \n <BR> \n"); 
+						textIndent = textIndent + indentFactor; 
+						:}
+					SENTLIST end{:
+						html.matriz.get(contador).add("<SPAN class='palres'>end</SPAN>"); 
+						textIndent = textIndent - indentFactor;
+						:};
 DCLLIST ::= 		DCLLIST DCL | ;
-SENTLIST ::= 		SENT | SENTLIST SENT;
+SENTLIST ::= 		{:html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");:} SENT  {:html.matriz.get(contador).add("</div>");:}
+					| SENTLIST {:html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");:} SENT {:html.matriz.get(contador).add("</div>");:};
 
 /* Declaration's zone */
 DCL ::= 			DEFCTE | DEFVAR | DEFPROC {:contador++; html.matriz.add(new ArrayList<String>());:} | DEFFUN {:contador++; html.matriz.add(new ArrayList<String>());:} | DEFTYPE;
@@ -133,7 +143,7 @@ TBAS ::=			integer:integ{:html.matriz.get(contador).add("<A class='palres'>" + i
 
 
 /* Sentencies zone */
-SENT ::= 			ASIG semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:}  | PROC_CALL semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:} | EXEBLQ
+SENT ::= 			ASIG semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:} | PROC_CALL semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:} | EXEBLQ
 					| COND | WLOOP | FLOOP | CASE| error semicolon SENT;
 
 ASIG ::=			ID assignment{:html.matriz.get(contador).add(":=");:}  EXP;
@@ -169,31 +179,84 @@ EXPLIST ::=			EXP | EXP coma EXPLIST;
 
 PROC_CALL ::=		identifier:id{:html.matriz.get(contador).add("<A href='#"+ id + "'>"+ id +"</A>");:} SUBPARAMLIST;
 
-EXEBLQ ::= 			DCLLIST_BLQ begin{:html.matriz.get(contador).add("<SPAN class='palres'> begin </SPAN> \n <BR> \n");:} 
-					SENTLIST end{:html.matriz.get(contador).add("<SPAN class='palres'>end</SPAN> \n <BR> \n");:} | error end;
+EXEBLQ ::= 			DCLLIST_BLQ {:html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");:} 
+						begin{:
+						html.matriz.get(contador).add("<SPAN class='palres'> begin </SPAN> \n <BR> \n"); 
+						html.matriz.get(contador).add("</div>");
+						textIndent = textIndent + indentFactor; 
+						:} 
+					SENTLIST {:
+						textIndent = textIndent - indentFactor;
+						html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");:}
+						end{:
+						html.matriz.get(contador).add("<SPAN class='palres'>end</SPAN> \n <BR> \n");
+						html.matriz.get(contador).add("</div>");
+						:} | error end;
 DCLLIST_BLQ ::=		DCLLIST_BLQ semicolon{:html.matriz.get(contador).add("; \n <BR> \n");:} DCL_BLQ | ;
 DCL_BLQ ::= 		DEFCTE | DEFVAR;
 
-COND ::=			if_tok{:if_expression = true; html.matriz.get(contador).add("<SPAN class='palres'>if</SPAN>");:} 
-					EXP then_tok{:if_expression = false; html.matriz.get(contador).add("<SPAN class='palres'>then</SPAN> \n <BR> \n");:} SENT ELSECOND;
-ELSECOND ::= 		else_tok{:html.matriz.get(contador).add("<SPAN class='palres'>else</SPAN>");:} SENT| ;
+COND ::=			if_tok{:
+						if_expression = true; html.matriz.get(contador).add("<SPAN class='palres'>if</SPAN>");
+						textIndent = textIndent + indentFactor;
+						:} 
+					EXP then_tok{:
+						if_expression = false; html.matriz.get(contador).add("<SPAN class='palres'>then</SPAN> \n <BR> \n");
+						html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");
+						:} SENT{:
+						textIndent = textIndent - indentFactor;
+						html.matriz.get(contador).add("</div>");
+						:}
+						 ELSECOND;
+
+ELSECOND ::= 		else_tok{:
+						html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");
+						html.matriz.get(contador).add("<SPAN class='palres'>else</SPAN>");
+						html.matriz.get(contador).add("</div>");
+						textIndent = textIndent + indentFactor;
+						html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");
+						:} SENT {:
+							html.matriz.get(contador).add("</div>");
+							textIndent = textIndent - indentFactor;
+						:} | ;
 
 WLOOP ::= 			while_tok{:if_expression = true; html.matriz.get(contador).add("<SPAN class='palres'>while</SPAN>"); :} 
-					EXP do_tok{:if_expression = false; html.matriz.get(contador).add("<SPAN class='palres'>do</SPAN> \n <BR> \n");:} SENT;
+					EXP do_tok{:
+						if_expression = false; 
+						html.matriz.get(contador).add("<SPAN class='palres'>do</SPAN> \n <BR> \n");
+						textIndent = textIndent + indentFactor;
+						html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");
+						:} SENT{:
+						html.matriz.get(contador).add("</div>");
+						textIndent = textIndent - indentFactor;
+						:};
 
 FLOOP ::= 			for_tok{:html.matriz.get(contador).add("<SPAN class='palres'>while</SPAN>");:} 
 					identifier:id assignment{:html.matriz.get(contador).add("<SPAN class='palres'>" + id + "</SPAN> :=");:} 
-					EXP to{:html.matriz.get(contador).add("<SPAN class='palres'>to</SPAN>");:} 
-					EXP do_tok{:html.matriz.get(contador).add("<SPAN class='palres'>do</SPAN>\n <BR> \n");:} SENT;
+					EXP to{:html.matriz.get(contador).add("<SPAN class='palres'>to</SPAN>");:}
+					EXP do_tok{:
+						html.matriz.get(contador).add("<SPAN class='palres'>do</SPAN>\n <BR> \n");
+						textIndent = textIndent + indentFactor;
+						html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");
+						:} SENT {:
+						html.matriz.get(contador).add("</div>");
+						textIndent = textIndent - indentFactor;
+						:};
 
 CASE ::=			case_tok{:case_expression = true; html.matriz.get(contador).add("<SPAN class='palres'>case</SPAN>");:} 
 					EXP of{:case_expression = false; html.matriz.get(contador).add("<SPAN class='palres'>of</SPAN>");:} 
-					CASELIST end{:html.matriz.get(contador).add("<SPAN class='palres'>end</SPAN> \n <BR> \n");:};
+					{:html.matriz.get(contador).add("\n <BR> \n"); textIndent = textIndent + indentFactor;:} 
+					CASELIST {:
+						textIndent = textIndent - indentFactor; 
+						html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");:} 
+					end{:
+						html.matriz.get(contador).add("<SPAN class='palres'>end</SPAN> \n <BR> \n");
+						html.matriz.get(contador).add("</div>"); 
+						:};
 // Poner en la memoria que sobraba el punto y coma de la gramatica
 // CASELIST ::= EXP ":" SENT ";" | EXP ":" SENT ";" CASELIST
 //CASELIST ::= 		EXP two_points{:html.matriz.get(contador).add(":");:} %prec SENT
 					//| EXP two_points {:html.matriz.get(contador).add(":");:} SENT CASELIST;
-CASELIST ::=		CASELIST EXP two_points {:html.matriz.get(contador).add(":");:} SENT | ;
+CASELIST ::=		CASELIST {:html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");:}EXP two_points {:html.matriz.get(contador).add(":");:} SENT {:html.matriz.get(contador).add("</div>");:} | ;
 
 DEFTYPE ::= 		type{:html.matriz.get(contador).add("<SPAN class='palres'>type</SPAN>");:} TYPELIST;
 //TYPELIST ::= 		identifier:id equal
@@ -213,7 +276,7 @@ DEFRANG ::=			square_bracket_open{:html.matriz.get(contador).add("[");:}
 UDTYPE ::= 			array{:html.matriz.get(contador).add("<SPAN class='palres'>array</SPAN>");:}
 					DEFRANG of{:html.matriz.get(contador).add("<SPAN class='palres'>of</SPAN>");:} ALLTYPES 
 					| record{:html.matriz.get(contador).add("<SPAN class='palres'>record</SPAN>");:}
-					DEFVARLIST end{:html.matriz.get(contador).add("<SPAN class='palres'>end</SPAN> \n <BR> \n");:};
+					DEFVARLIST end;
 
 ALLTYPES ::= 		TBAS | identifier:id {:html.matriz.get(contador).add("<SPAN class='ident' name='"+ id + "'>"+ id + "</SPAN>");:};
 
