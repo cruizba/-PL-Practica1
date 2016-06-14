@@ -66,7 +66,7 @@ public class HTMLParser {
     				try{
     					String namefunc = linea.substring(9).split("\"")[0];
     					String[] sep = linea.split("<");
-    					toAdd = "<" + sep[2] + "<" + sep[3] + "<a SPAN href=\"#" + namefunc + "\"" + sep[4].substring(4) + "</a>";
+    					toAdd = "<" + sep[2] + "<" + sep[3] + "<a SPAN href=\"#" + namefunc + "\"" + sep[4].substring(4) + "</a> (";
     				}catch(IndexOutOfBoundsException e){
     					System.out.println("ERROR: linea.split no ha separado en i="+i+" k="+k);
     					e.printStackTrace();
