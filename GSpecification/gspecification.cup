@@ -96,7 +96,7 @@ precedence left while_tok, for_tok, case_tok;
 precedence left begin;
 
 /*Main Grammar*/
-PRG ::=		 		program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:}semicolon BLQ dot {:html.createHTML("HTMLPrueba.html");:}|error dot;
+PRG ::=		 		program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:}semicolon BLQ dot {:html.matriz.get(contador).add(0, "<HR>"); html.createHTML("HTMLPrueba.html");:}|error dot;
 BLQ ::= 			DCLLIST begin{:
 						html.matriz.get(contador).add("<SPAN class='palres'> begin </SPAN> \n <BR> \n"); 
 						textIndent = textIndent + indentFactor; 
@@ -110,7 +110,9 @@ SENTLIST ::= 		{:html.matriz.get(contador).add("<div style='text-indent: "+ text
 					| SENTLIST {:html.matriz.get(contador).add("<div style='text-indent: "+ textIndent + "cm'>");:} SENT {:html.matriz.get(contador).add("</div>");:};
 
 /* Declaration's zone */
-DCL ::= 			DEFCTE | DEFVAR | DEFPROC {:contador++; html.matriz.add(new ArrayList<String>());:} | DEFFUN {:contador++; html.matriz.add(new ArrayList<String>());:} | DEFTYPE;
+DCL ::= 			DEFCTE | DEFVAR 
+					| {:html.matriz.get(contador).add("<HR>");:} DEFPROC {:contador++; html.matriz.add(new ArrayList<String>());:} 
+					| {:html.matriz.get(contador).add("<HR>");:} DEFFUN {:contador++; html.matriz.add(new ArrayList<String>());:} | DEFTYPE;
 
 DEFCTE ::= 			const_tok:ctet {:html.matriz.get(contador).add("<SPAN class='palres'>" + ctet + "</SPAN>");:} CTELIST;
 CTELIST ::= 		identifier:id{:html.matriz.get(contador).add("<A name='"+ id + contador +"'><SPAN class='ident'>" + id + "</SPAN> =");:} equal SIMPVALUE semicolon{:html.matriz.get(contador).add("; \n <BR> \n");:} 
@@ -132,7 +134,7 @@ DEFPROC ::= 		procedure identifier:identifier {:html.matriz.get(contador).add("<
 DEFFUN ::= 			function identifier:identifier {:html.matriz.get(contador).add("<A NAME=\""+identifier+"\">\n"+"<SPAN CLASS=\"palres\">function</SPAN> <SPAN CLASS=\"ident\">"+identifier+"</SPAN> ( "); :} 
 					FORMAL_PARAMLIST {:html.matriz.get(contador).add(")");:} two_points{:html.matriz.get(contador).add(":");:}
 					ALLTYPES semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:}
-					BLQ semicolon;
+					BLQ semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:};
 
 FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
 FORMAL_PARAM ::=	VARLIST two_points ALLTYPES | VARLIST two_points FORMAL_PARAM semicolon FORMAL_PARAM| ;
