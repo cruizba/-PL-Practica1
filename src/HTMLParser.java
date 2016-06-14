@@ -54,6 +54,7 @@ public class HTMLParser {
     }
     
     public void headersHTML(){
+    	matriz.get(1).add("<H2>Funciones y procedimientos</H2>\n<UL>");
     	String linea;
     	for(int i = 2; i < matriz.size()-1; i++){
     		String suma = "";
@@ -66,7 +67,7 @@ public class HTMLParser {
     				try{
     					String namefunc = linea.substring(9).split("\"")[0];
     					String[] sep = linea.split("<");
-    					toAdd = "<" + sep[2] + "<" + sep[3] + "<a SPAN href=\"#" + namefunc + "\"" + sep[4].substring(4) + "</a> (";
+    					toAdd = namefunc + "\"" + sep[4].substring(4) + " (";
     				}catch(IndexOutOfBoundsException e){
     					System.out.println("ERROR: linea.split no ha separado en i="+i+" k="+k);
     					e.printStackTrace();
@@ -83,8 +84,9 @@ public class HTMLParser {
     			suma += toAdd;
     			k++;
     		}
-    		matriz.get(1).add(suma+"\n<br>\n");
+    		matriz.get(1).add("<LI><A HREF=\"#" + suma+"</LI>\n");
     	}
+    	matriz.get(1).add("<LI><A HREF=\"#ProgPpal\">Programa princial</A></LI>\n</UL>\n<HR/>");
     }
     
 }
