@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<HTML>
+<head>
+<title>Practica PL</title>
+<style>
+.cte {color:rgb(19,189,72);}
+.ident {color:rgb(55,40,244);}
+.palres {color:rgb(0,0,0);font-weight:bold;}
+</style>
+</head>
+
+<BODY>
+<A NAME="inicio">
+<H1>Programa: EjemploAprobado1</H1>
+<H2>Funciones y procedimientos</H2>
+<UL>
+<LI><A HREF="#areaCuadrado">
+<SPAN CLASS="palres">function</SPAN> <SPAN CLASS="ident">areaCuadrado</SPAN> ( <A name='lado2'> 
+ <SPAN class='ident'>lado</SPAN></A><A class='palres'>REAL</A>):<A class='palres'>REAL</A>;</LI></A>
+
+<LI><A HREF="#intercambio">
+<SPAN CLASS="palres">procedure</SPAN> <SPAN CLASS="ident">intercambio</SPAN> ( <A name='v13'> 
+ <SPAN class='ident'>v1</SPAN>, </A><A name='v23'> 
+ <SPAN class='ident'>v2</SPAN></A><A class='palres'>INTEGER</A>);</LI></A>
+
+<LI><A HREF="#pruebasif">
+<SPAN CLASS="palres">procedure</SPAN> <SPAN CLASS="ident">pruebasif</SPAN> ( );</LI></A>
+
+<LI><A HREF="#pruebasBucles">
+<SPAN CLASS="palres">procedure</SPAN> <SPAN CLASS="ident">pruebasBucles</SPAN> ( );</LI></A>
+
+<LI><A HREF="#ProgPpal">Programa princial</A></LI>
+</UL>
+
+<HR>
+<A NAME="areaCuadrado">
+<SPAN CLASS="palres">function</SPAN> <SPAN CLASS="ident">areaCuadrado</SPAN> ( 
+<A name='lado2'> 
+ <SPAN class='ident'>lado</SPAN></A>
+<A class='palres'>REAL</A>
+)
+:
+<A class='palres'>REAL</A>
+; 
+ <BR> 
+
+<A class='palres'>var</A>
+<A name='resultado2'> 
+ <SPAN class='ident'>resultado</SPAN></A>
+:
+<A class='palres'>REAL</A>
+; 
+ <BR> 
+
+<SPAN class='palres'> begin </SPAN> 
+ <BR> 
+
+<div style='text-indent: 0.5cm'>
+<A href='#resultado2'>resultado</A>
+:=
+<SPAN class='cte'>+0.0</SPAN>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#resultado2'>resultado</A>
+:=
+<A href='#lado'>lado</A>
+*
+<A href='#lado'>lado</A>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#areaCuadrado2'>areaCuadrado</A>
+:=
+<A href='#resultado'>resultado</A>
+; 
+ <BR> 
+
+</div>
+<SPAN class='palres'>end</SPAN>
+; 
+ <BR> 
+
+<A href='#areaCuadrado'>Inicio de rutina</A><BR>
+<A href='#inicio'>Inicio de programa</A>
+<HR>
+<A NAME="intercambio">
+<SPAN CLASS="palres">procedure</SPAN> <SPAN CLASS="ident">intercambio</SPAN> ( 
+<A name='v13'> 
+ <SPAN class='ident'>v1</SPAN>, </A>
+<A name='v23'> 
+ <SPAN class='ident'>v2</SPAN></A>
+<A class='palres'>INTEGER</A>
+)
+; 
+ <BR>
+<A class='palres'>var</A>
+<A name='aux3'> 
+ <SPAN class='ident'>aux</SPAN></A>
+:
+<A class='palres'>INTEGER</A>
+; 
+ <BR> 
+
+<SPAN class='palres'> begin </SPAN> 
+ <BR> 
+
+<div style='text-indent: 0.5cm'>
+<A href='#aux3'>aux</A>
+:=
+<SPAN class='cte'>0</SPAN>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#aux3'>aux</A>
+:=
+<A href='#v1'>v1</A>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#v13'>v1</A>
+:=
+<A href='#v2'>v2</A>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#v23'>v2</A>
+:=
+<A href='#aux'>aux</A>
+; 
+ <BR> 
+
+</div>
+<SPAN class='palres'>end</SPAN>
+; 
+ <BR>
+<A href='#intercambio'>Inicio de rutina</A><BR>
+<A href='#inicio'>Inicio de programa</A>
+<HR>
+<A NAME="pruebasif">
+<SPAN CLASS="palres">procedure</SPAN> <SPAN CLASS="ident">pruebasif</SPAN> ( 
+)
+; 
+ <BR>
+<SPAN class='palres'>const</SPAN>
+<A name='vConst14'><SPAN class='ident'>vConst1</SPAN> =
+<SPAN class='cte'>10</SPAN>
+; 
+ <BR> 
+
+<A name='vConst24'><SPAN class='ident'>vConst2</SPAN> =
+<SPAN class='cte'>20</SPAN>
+; 
+ <BR> 
+
+<A class='palres'>var</A>
+<A name='valor14'> 
+ <SPAN class='ident'>valor1</SPAN></A>
+:
+<A class='palres'>INTEGER</A>
+; 
+ <BR> 
+
+<A name='valor24'> 
+ <SPAN class='ident'>valor2</SPAN></A>
+:
+<A class='palres'>INTEGER</A>
+; 
+ <BR> 
+
+<SPAN class='palres'> begin </SPAN> 
+ <BR> 
+
+<div style='text-indent: 0.5cm'>
+<A href='#valor14'>valor1</A>
+:=
+<A href='#vConst'>vConst</A>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#valor24'>valor2</A>
+:=
+<A href='#vCosnt'>vCosnt</A>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<SPAN class='palres'>if</SPAN>
+(
+<A href='#valor1'>valor1</A>
+<
+<A href='#valor2'>valor2</A>
+)
+<SPAN class='palres'>then</SPAN> 
+ <BR> 
+
+<div style='text-indent: 1.0cm'>
+<A href='#intercambio'>intercambio</A>
+(
+<A href='#valor1'>valor1</A>
+<A href='#valor2'>valor2</A>
+)
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<SPAN class='palres'>else</SPAN>
+</div>
+<div style='text-indent: 1.0cm'>
+<A href='#intercambio'>intercambio</A>
+(
+<A href='#valor2'>valor2</A>
+<A href='#valor1'>valor1</A>
+)
+; 
+ <BR> 
+
+</div>
+</div>
+<div style='text-indent: 0.5cm'>
+<SPAN class='palres'>case</SPAN>
+<A href='#valor2'>valor2</A>
+<SPAN class='palres'>of</SPAN>
+
+ <BR> 
+
+<div style='text-indent: 1.0cm'>
+<SPAN class='cte'>10</SPAN>
+:
+<A href='#intercambio'>intercambio</A>
+(
+<A href='#valor1'>valor1</A>
+<A href='#valor2'>valor2</A>
+)
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 1.0cm'>
+<SPAN class='cte'>20</SPAN>
+:
+<A href='#intercambio'>intercambio</A>
+(
+<A href='#valor2'>valor2</A>
+<A href='#valor1'>valor1</A>
+)
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<SPAN class='palres'>end</SPAN> 
+ <BR> 
+
+</div>
+</div>
+<SPAN class='palres'>end</SPAN>
+; 
+ <BR>
+<A href='#pruebasif'>Inicio de rutina</A><BR>
+<A href='#inicio'>Inicio de programa</A>
+<HR>
+<A NAME="pruebasBucles">
+<SPAN CLASS="palres">procedure</SPAN> <SPAN CLASS="ident">pruebasBucles</SPAN> ( 
+)
+; 
+ <BR>
+<SPAN class='palres'>const</SPAN>
+<A name='vConst15'><SPAN class='ident'>vConst1</SPAN> =
+<SPAN class='cte'>10</SPAN>
+; 
+ <BR> 
+
+<A name='vConst25'><SPAN class='ident'>vConst2</SPAN> =
+<SPAN class='cte'>20</SPAN>
+; 
+ <BR> 
+
+<A class='palres'>var</A>
+<A name='valor15'> 
+ <SPAN class='ident'>valor1</SPAN></A>
+:
+<A class='palres'>INTEGER</A>
+; 
+ <BR> 
+
+<A name='valor25'> 
+ <SPAN class='ident'>valor2</SPAN></A>
+:
+<A class='palres'>INTEGER</A>
+; 
+ <BR> 
+
+<A name='inc5'> 
+ <SPAN class='ident'>inc</SPAN></A>
+:
+<A class='palres'>INTEGER</A>
+; 
+ <BR> 
+
+<A name='inc25'> 
+ <SPAN class='ident'>inc2</SPAN></A>
+:
+<SPAN class='ident' name='INTERGER'>INTERGER</SPAN>
+; 
+ <BR> 
+
+<A name='inc35'> 
+ <SPAN class='ident'>inc3</SPAN></A>
+:
+<A class='palres'>INTEGER</A>
+; 
+ <BR> 
+
+<SPAN class='palres'> begin </SPAN> 
+ <BR> 
+
+<div style='text-indent: 0.5cm'>
+<A href='#valor15'>valor1</A>
+:=
+<A href='#vConst1'>vConst1</A>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#inc5'>inc</A>
+:=
+<SPAN class='cte'>0</SPAN>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#inc35'>inc3</A>
+:=
+<SPAN class='cte'>0</SPAN>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<SPAN class='palres'>while</SPAN>
+(
+<A href='#inc'>inc</A>
+<
+<A href='#valor1'>valor1</A>
+)
+<SPAN class='palres'>do</SPAN> 
+ <BR> 
+
+<div style='text-indent: 1.0cm'>
+<A href='#inc5'>inc</A>
+:=
+<A href='#inc'>inc</A>
++
+<SPAN class='cte'>1</SPAN>
+; 
+ <BR> 
+
+</div>
+</div>
+<div style='text-indent: 0.5cm'>
+<SPAN class='palres'>while</SPAN>
+<SPAN class='palres'>inc2</SPAN> :=
+<SPAN class='cte'>0</SPAN>
+<SPAN class='palres'>to</SPAN>
+<A href='#vConst2'>vConst2</A>
+<SPAN class='palres'>do</SPAN>
+ <BR> 
+
+<div style='text-indent: 1.0cm'>
+<div style='text-indent: 1.0cm'>
+<SPAN class='palres'> begin </SPAN> 
+ <BR> 
+
+</div>
+<div style='text-indent: 1.5cm'>
+<A href='#inc5'>inc</A>
+:=
+<A href='#inc'>inc</A>
++
+<SPAN class='cte'>1</SPAN>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 1.5cm'>
+<A href='#inc35'>inc3</A>
+:=
+<A href='#inc3'>inc3</A>
++
+<SPAN class='cte'>1</SPAN>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 1.0cm'>
+<SPAN class='palres'>end</SPAN> 
+ <BR> 
+
+</div>
+</div>
+</div>
+<SPAN class='palres'>end</SPAN>
+; 
+ <BR>
+<A href='#pruebasBucles'>Inicio de rutina</A><BR>
+<A href='#inicio'>Inicio de programa</A>
+<HR>
+<A name'ProgPrincipal'></A>
+<H2>Programa Principal</H2>
+<SPAN class='palres'>type</SPAN>
+<SPAN class='ident' name='vector'>vector</SPAN> = 
+<SPAN class='palres'>array</SPAN>
+[
+<SPAN class='cte'>1</SPAN>
+..
+<SPAN class='cte'>3</SPAN>
+]
+<SPAN class='palres'>of</SPAN>
+<A class='palres'>REAL</A>
+; 
+ <BR> 
+
+<SPAN class='ident' name='matriz'>matriz</SPAN> = 
+<SPAN class='palres'>array</SPAN>
+[
+<SPAN class='cte'>1</SPAN>
+..
+<SPAN class='cte'>3</SPAN>
+]
+<SPAN class='palres'>of</SPAN>
+<SPAN class='ident' name='vector'>vector</SPAN>
+; 
+ <BR> 
+
+<SPAN class='ident' name='TRegistro'>TRegistro</SPAN> = 
+<SPAN class='palres'>record</SPAN>
+<A name='campo16'> 
+ <SPAN class='ident'>campo1</SPAN></A>
+:
+<SPAN class='ident' name='matriz'>matriz</SPAN>
+; 
+ <BR> 
+
+<A name='campo26'> 
+ <SPAN class='ident'>campo2</SPAN></A>
+:
+<A class='palres'>INTEGER</A>
+; 
+ <BR> 
+
+<A class='palres'>var</A>
+<A name='medida6'> 
+ <SPAN class='ident'>medida</SPAN></A>
+:
+<A class='palres'>REAL</A>
+; 
+ <BR> 
+
+<A name='valor16'> 
+ <SPAN class='ident'>valor1</SPAN>, </A>
+<A name='valor26'> 
+ <SPAN class='ident'>valor2</SPAN></A>
+:
+<A class='palres'>INTEGER</A>
+; 
+ <BR> 
+
+<SPAN class='palres'> begin </SPAN> 
+ <BR> 
+
+<div style='text-indent: 0.5cm'>
+<A href='#medida6'>medida</A>
+:=
+<SPAN class='cte'>$4.A</SPAN>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#valor16'>valor1</A>
+:=
+<SPAN class='cte'>-3</SPAN>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#valor26'>valor2</A>
+:=
+<SPAN class='cte'>$F6</SPAN>
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#medida6'>medida</A>
+:=
+<A href='#areaCuadrado'>areaCuadrado</A>
+(
+<A href='#medida'>medida</A>
+)
+; 
+ <BR> 
+
+</div>
+<div style='text-indent: 0.5cm'>
+<A href='#intercambio'>intercambio</A>
+(
+<A href='#valor1'>valor1</A>
+<A href='#valor2'>valor2</A>
+)
+; 
+ <BR> 
+
+</div>
+<SPAN class='palres'>end</SPAN>
+<BR><A href='#progPrincipal'>Inicio de programa principal</A><BR>
+<A href='#inicio'>Inicio de programa</A>

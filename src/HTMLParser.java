@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,6 +18,7 @@ import java.util.ArrayList;
  */
 public class HTMLParser {
     public ArrayList<ArrayList<String>> matriz = new ArrayList<ArrayList<String>>();
+    public static boolean error = false;
     
     
     public HTMLParser(){
@@ -56,6 +58,8 @@ public class HTMLParser {
     public void headersHTML(){
     	matriz.get(1).add("<H2>Funciones y procedimientos</H2>\n<UL>");
     	String linea;
+    	ArrayList<String> nFunctions = new ArrayList<String>();
+    	Iterator<String> itNameFunctions = null;
     	for(int i = 2; i < matriz.size()-1; i++){
     		String suma = "";
     		int k = 0;
@@ -63,14 +67,14 @@ public class HTMLParser {
     		String toAdd = "";
     		while(!found){
     			linea = matriz.get(i).get(k);
-    			if(k==0){
+    			if(k==1){
     				try{
     					String namefunc = linea.substring(9).split("\"")[0];
+    					nFunctions.add(namefunc);
     					String[] sep = linea.split("<");
     					toAdd = namefunc + "\"" + sep[4].substring(4) + " (";
     				}catch(IndexOutOfBoundsException e){
-    					System.out.println("ERROR: linea.split no ha separado en i="+i+" k="+k);
-    					e.printStackTrace();
+    					
     				}
     				
     			}
@@ -83,10 +87,11 @@ public class HTMLParser {
     			}
     			suma += toAdd;
     			k++;
+    			itNameFunctions = nFunctions.iterator();
     		}
-    		matriz.get(1).add("<LI><A HREF=\"#" + suma+"</LI>\n");
+    		matriz.get(1).add("<LI>" +suma.replace("A NAME=\"", "A HREF=\"#") + "</LI></A>\n");
     	}
-    	matriz.get(1).add("<LI><A HREF=\"#ProgPpal\">Programa princial</A></LI>\n</UL>\n<HR/>");
+    	matriz.get(1).add("<LI><A HREF=\"#ProgPpal\">Programa princial</A></LI>\n</UL>\n");
     }
     
 }

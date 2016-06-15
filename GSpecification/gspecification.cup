@@ -14,6 +14,8 @@ action code{:
 
 	public double textIndent = 0;
 	public double indentFactor = 0.5;
+
+	public boolean error = false;
 :};
 parser code{:
 
@@ -55,6 +57,7 @@ parser code{:
 	public void syntax_error(Symbol s) { 
 		int l = s.left + 1;
 		int c = s.right + 1;
+		HTMLParser.error = true;
 		report_error("*The String: " + s.value + " has produced a syntax error. Line " + l + ", column " + c + "\n", null);
 	}
 	@Override 
@@ -96,7 +99,17 @@ precedence left while_tok, for_tok, case_tok;
 precedence left begin;
 
 /*Main Grammar*/
-PRG ::=		 		program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:}semicolon BLQ dot {:html.matriz.get(contador).add(0, "<HR>"); html.createHTML("HTMLPrueba.html");:}|error dot;
+PRG ::=		 		{:HTMLParser.error = false;:}program identifier:id {:html.matriz.get(0).add("<H1>Programa: "+id+"</H1>");:}semicolon 
+					BLQ dot {:
+						html.matriz.get(contador).add(0, "<HR>");
+						html.matriz.get(contador).add(1, "<H2>Programa Principal</H2>"); 
+						html.matriz.get(contador).add(1, "<A name'ProgPrincipal'></A>");
+						html.matriz.get(contador).add("<BR><A href='#progPrincipal'>Inicio de programa principal</A><BR>");
+						html.matriz.get(contador).add("<A href='#inicio'>Inicio de programa</A>");
+						if (!HTMLParser.error){
+							html.createHTML("HTMLPrueba.html");
+						}
+						:}|error dot;
 BLQ ::= 			DCLLIST begin{:
 						html.matriz.get(contador).add("<SPAN class='palres'> begin </SPAN> \n <BR> \n"); 
 						textIndent = textIndent + indentFactor; 
@@ -129,12 +142,20 @@ VARLIST ::=			identifier:id{:html.matriz.get(contador).add("<A name='" + id+cont
 DEFPROC ::= 		procedure identifier:identifier {:html.matriz.get(contador).add("<A NAME=\""+identifier+"\">\n"+"<SPAN CLASS=\"palres\">procedure</SPAN> <SPAN CLASS=\"ident\">"+identifier+"</SPAN> ( "); :} 
 					FORMAL_PARAMLIST {:html.matriz.get(contador).add(")");:}
 					semicolon{:html.matriz.get(contador).add("; \n <BR>");:}
-					BLQ semicolon{:html.matriz.get(contador).add("; \n <BR>");:};
+					BLQ semicolon{:
+						html.matriz.get(contador).add("; \n <BR>");
+						html.matriz.get(contador).add("<A href='#" + identifier + "'>Inicio de rutina</A><BR>");
+						html.matriz.get(contador).add("<A href='#inicio'>Inicio de programa</A>");
+						:};
 
 DEFFUN ::= 			function identifier:identifier {:html.matriz.get(contador).add("<A NAME=\""+identifier+"\">\n"+"<SPAN CLASS=\"palres\">function</SPAN> <SPAN CLASS=\"ident\">"+identifier+"</SPAN> ( "); :} 
 					FORMAL_PARAMLIST {:html.matriz.get(contador).add(")");:} two_points{:html.matriz.get(contador).add(":");:}
 					ALLTYPES semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:}
-					BLQ semicolon {:html.matriz.get(contador).add("; \n <BR> \n");:};
+					BLQ semicolon {:
+						html.matriz.get(contador).add("; \n <BR> \n");
+						html.matriz.get(contador).add("<A href='#" + identifier + "'>Inicio de rutina</A><BR>");
+						html.matriz.get(contador).add("<A href='#inicio'>Inicio de programa</A>");
+						:};
 
 FORMAL_PARAMLIST ::=open_parenthesis FORMAL_PARAM closed_parenthesis | error closed_parenthesis;
 FORMAL_PARAM ::=	VARLIST two_points ALLTYPES | VARLIST two_points FORMAL_PARAM semicolon FORMAL_PARAM| ;
